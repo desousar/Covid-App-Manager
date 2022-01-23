@@ -74,17 +74,17 @@ public class MainWindow extends JFrame implements ActionListener
     public void displayAuthView() {
     	authPanel = new AuthPanel();
     	JPanel buttonLayout = new JPanel();
-   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,50));
+   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,25));
    	 	buttonLayout.add(authButton);
     	authPanel.addLayout(buttonLayout);
        this.setContentPane(this.authPanel.getContenu());
        this.revalidate();
    }
     
-    public void displayStockView() {
+    public void displayStockView() throws IOException {
     	 stockPanel = new StockPanel();
     	 JPanel buttonLayout = new JPanel();
-    	 buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,50));
+    	 buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,50,25));
     	 buttonLayout.add(vaccineViewButton);
     	 buttonLayout.add(statViewButton);
     	 stockPanel.addLayout(buttonLayout);

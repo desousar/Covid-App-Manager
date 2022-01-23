@@ -40,9 +40,6 @@ public class StatisticsPanel extends JPanel {
 		JPanel img2 = new JPanel();
 		img2.setLayout(new FlowLayout(FlowLayout.RIGHT,20,20));
 		
-		img1.setMaximumSize(getPreferredSize());
-		img2.setMaximumSize(getPreferredSize());
-		
 		img1.add(picLabel);
 		img2.add(picLabel2);
 		

@@ -1,9 +1,15 @@
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,13 +50,35 @@ public class StockPanel implements ActionListener{
 	JTextField overallTextField = new JTextField();
 	JButton overallDelButton = new JButton("Delete");
 	
-    public StockPanel() {
-		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+    public StockPanel() throws IOException {
+		p.setLayout(new BorderLayout());
 		StockDAO stockDAO = new StockDAO();	
 		
+		
 		JPanel titleLayout = new JPanel();
-		titleLayout.setLayout(new FlowLayout(FlowLayout.CENTER,0,20));
-		titleLayout.add(matmanage);
+		titleLayout.setLayout(new BorderLayout());
+		BufferedImage myPicture = ImageIO.read(new File("Image1.png"));
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		BufferedImage myPicture2 = ImageIO.read(new File("Image2.png"));
+		JLabel picLabel2 = new JLabel(new ImageIcon(myPicture2));
+		
+		JPanel img1 = new JPanel();
+		img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));
+		JPanel img2 = new JPanel();
+		img2.setLayout(new FlowLayout(FlowLayout.RIGHT,20,20));
+		
+		img1.add(picLabel);
+		img2.add(picLabel2);
+		
+		titleLayout.add(img1, BorderLayout.LINE_START);
+		titleLayout.add(img2, BorderLayout.LINE_END);
+		 
+		JPanel listPane = new JPanel();
+		listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
+		
+		JPanel littletitleLayout = new JPanel();
+		littletitleLayout.setLayout(new FlowLayout(FlowLayout.CENTER,0,20));
+		littletitleLayout.add(matmanage);
 		
 		JPanel corpsLayout = new JPanel();
 		corpsLayout.setLayout(new GridLayout(1,2));
@@ -152,19 +180,21 @@ public class StockPanel implements ActionListener{
         overallDelButton.addActionListener(this);
         col2Layout.add(overall2Layout);
         
-        
         corpsLayout.add(col1Layout);
         corpsLayout.add(col2Layout);
         
-        p.add(titleLayout);
-        p.add(corpsLayout);
+        listPane.add(littletitleLayout);
+        listPane.add(corpsLayout);
+        
+        p.add(titleLayout,BorderLayout.PAGE_START);
+        p.add(listPane,BorderLayout.CENTER);
     }
     
 	public void add(JButton boutonEnvoi) {
 		p.add(boutonEnvoi);
 	}
 	public void addLayout(JPanel layout) {
-		p.add(layout);
+		p.add(layout, BorderLayout.PAGE_END);
 	}
 	public JPanel getContenu() {
 		return p;
