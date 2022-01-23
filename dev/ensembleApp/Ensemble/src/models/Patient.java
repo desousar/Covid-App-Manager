@@ -19,6 +19,15 @@ public class Patient {
 		this.namevaccine = namevaccine;
 		this.nbrdose = nbrdose;
 	}
+	
+	public Patient(String firstname, String lastname, Date datebirth, String namevaccine, int nbrdose) {
+	
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.datebirth = datebirth;
+		this.namevaccine = namevaccine;
+		this.nbrdose = nbrdose;
+	}
 
 	@Override
 	public String toString() {

@@ -26,7 +26,7 @@ public class MainWindow extends JFrame implements ActionListener
     public MainWindow()
     {
         this.setTitle("Ensemble");
-        this.setSize(600,600);     
+        this.setSize(1000,600);     
     
         authButton.addActionListener(this);
         stockViewButton.addActionListener(this);

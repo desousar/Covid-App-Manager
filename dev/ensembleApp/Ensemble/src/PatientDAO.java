@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class PatientDAO {
 	 */
 	final static String PORT1 = "8889";
 	final static String PORT2 = "3306";
-	final static String URL = "jdbc:mysql://localhost:" + PORT2 + "/ensemble";
+	final static String URL = "jdbc:mysql://localhost:" + PORT1 + "/ensemble";
 	final static String LOGIN="root";
 	final static String PASS="root";
 
@@ -74,17 +75,18 @@ public class PatientDAO {
 	 * Increment patient nbrdose by 1 in the database
 	 * @param id : patient id 
 	 */
-	public void addDoseToPatient(int id) {
+	public void updatePatientDose(int id,int nb) {
 		
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
 
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("UPDATE patient SET nbrdose = (nbrdose + 1) WHERE id = ?");
-			ps.setInt(1,id);
+			ps = con.prepareStatement("UPDATE patient SET nbrdose = ? WHERE id = ?");
+			ps.setInt(1,nb);
+			ps.setInt(2,id);
 			ps.executeUpdate();
-
+			System.out.println("Patient id : " +id + ",nbrDose updated : "+nb);
 		} catch (Exception ee) {
 			ee.printStackTrace();
 		} finally {
@@ -168,8 +170,12 @@ public class PatientDAO {
 	public static void TestAddPatient() {
 		
 		PatientDAO PatientDAO=new PatientDAO();
-		@SuppressWarnings("deprecation")
-		Patient a = new Patient(2,"robin","pomme",new Date(2021, 02, 02),"Pfizer",2);
+		
+		LocalDate localDate = LocalDate.of(2014, 9, 11);
+		Date date = Date.valueOf(localDate);
+		System.out.println("date = " + date.toString());
+		Patient a = new Patient(2,"robin","te",date,"Pfizer",2);
+	
 		int nbrow =PatientDAO.addPatient(a);
 		System.out.println(nbrow+ " added row");
 	}
@@ -179,12 +185,12 @@ public class PatientDAO {
 		Patient pt = PatientDAO.getPatient(1);
 		System.out.println("Patient added : " + pt);
 	}
-	public static void TestAddDoseToPatient() {
+	public static void TestUpdatePatientDose() {
 		PatientDAO PatientDAO=new PatientDAO();
 		Patient pt = PatientDAO.getPatient(1);
 		System.out.println("before: nbrdose = " + pt.getNbrdose());
 		
-		PatientDAO.addDoseToPatient(1);
+		PatientDAO.updatePatientDose(1,2);
 		pt = PatientDAO.getPatient(1);
 		System.out.println("after: nbrdose = " + pt.getNbrdose());
 	}

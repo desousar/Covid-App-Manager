@@ -1,83 +1,225 @@
-import java.awt.Color;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
-import javax.swing.BorderFactory;
+import java.util.Properties;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.JTextField;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import javax.swing.text.DefaultFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import models.Patient;
 
-public class PatientPanel extends JPanel {
+public class PatientPanel extends JPanel implements ActionListener {
 			  
 	    private static final long serialVersionUID = 1L;
 	    private static PatientDAO patientDAO;
-	    
-	    private List<String> tableColumns = Arrays.asList("id","First Name","Last Name","Date of birth","Vaccine","Nbrdose");
-	    private List<Patient> patientList;
-	    
-	    public PatientPanel() {
-	    	
-	    	patientDAO = new PatientDAO();	
-	    	patientList = patientDAO.getListPatients();
-	      
-	        this.setBackground(Color.darkGray);
+	    private static JTable patientsTable;
 	  
-	        List<Object[]> data = new ArrayList<Object[]>();
+	    
+	    
+	    private JTextField firstname;
+	    private JTextField lastname;   
+	    private JDatePickerImpl datePicker;
+	    private JTextField namevaccine;
+	    
+	   
+	    private JTextField nbrDose;
+
+	    private JButton addRowButton = new JButton("Add");	    
+	    private String [] tableColumns = {"Id","First Name","Last Name","Date of birth","Vaccine","Nbrdose"};
+	    private JScrollPane scrollPane;
+	    private List<Patient> patientList;
+	  
+	    
+	    public PatientPanel() {    	
+	    	    	
+	    	JPanel formpanel = new JPanel();
+
+	    	addRowButton.addActionListener(this);
+	    	
+	    	initTableData();
+	     
+	        JLabel firstnamelabel = new JLabel("First Name");
+	        firstname = new JTextField(5);
+	        firstname.setToolTipText("First name");
 	        
-	        for (int i = 0; i < patientList.size(); i++) {
-	            Object[] value = new Object[6];
-	            value[0] = String.valueOf(patientList.get(i).getId());
-	            value[1] = patientList.get(i).getFirstname();
-	            value[2] = patientList.get(i).getLastname();
-	            value[3] = patientList.get(i).getDatebirth().toString();
-	            value[4] = patientList.get(i).getnamevaccine();
-	            value[5] = String.valueOf(patientList.get(i).getNbrdose());
-	            data.add(value);
-	        }
+	        JLabel lastnamelabel = new JLabel("Last Name");
+	        lastname = new JTextField(5);
+	        lastname.setToolTipText("Last name");
 	        
-	        JTable table = new JTable(new PatientTableModel(tableColumns,data));
-	        table.setShowGrid(true);
-	        table.setShowVerticalLines(true);
-	        JScrollPane pane = new JScrollPane(table);
-	        this.add(pane);  
-	        this.setBorder(BorderFactory.createEmptyBorder(100,100,100,100));        
+	        JLabel namevaccinelabel = new JLabel("Vaccine");
+	        namevaccine = new JTextField(5);
+	        namevaccine.setToolTipText("Vaccine");
+	        
+	        JLabel nbrDoselabel = new JLabel("Nbrdose");
+	        nbrDose = new JTextField(5);
+	        nbrDose.setToolTipText("Number of doses");
+	        
+	        JLabel birthDatelabel = new JLabel("Birth date");
+	       
+			UtilDateModel calmodel = new UtilDateModel();
+
+			Properties p = new Properties();
+			p.put("text.today", "Today");
+			p.put("text.month", "Month");
+			p.put("text.year", "Year");
+			JDatePanelImpl datePanel = new JDatePanelImpl(calmodel, p);
+						 
+			datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+	  
+	       
+	        formpanel.add(firstnamelabel);
+	        formpanel.add(firstname);
+	      
+	        formpanel.add(lastnamelabel);
+	        formpanel.add(lastname);
+	        
+	        formpanel.add(birthDatelabel);
+	        formpanel.add(datePicker);
+	        formpanel.add(namevaccinelabel);
+	        formpanel.add(namevaccine);
+	        
+	        formpanel.add(nbrDoselabel);
+	        formpanel.add(nbrDose);
+	        
+	        formpanel.add(addRowButton);
+
+	        this.add(scrollPane,BorderLayout.NORTH);	  
+	        this.add(formpanel,BorderLayout.CENTER);
+	      
 	    }
 	    
-	    public static class PatientTableModel extends AbstractTableModel {
+	    public Object[][] getPatientsData(){
+	    	patientDAO = new PatientDAO();   	
+	    	patientList = patientDAO.getListPatients(); 	
+	    
+	        Object[][] data = new Object[patientList.size()][6];
+	        
+	        for (int i = 0; i < patientList.size(); i++) {
+	            data[i][0] = patientList.get(i).getId();
+	            data[i][1] = patientList.get(i).getFirstname();
+	            data[i][2] = patientList.get(i).getLastname();
+	            data[i][3] = patientList.get(i).getDatebirth().toString();
+	            data[i][4] = patientList.get(i).getnamevaccine();
+	            data[i][5] = patientList.get(i).getNbrdose();         
+	        }
+	        return data;
+	    }
+	    
+	    public void updatePatientTable() {
+	    	 DefaultTableModel updatedModel = new DefaultTableModel(getPatientsData(),tableColumns);       
+		     patientsTable.setModel(updatedModel);
+	    }
+	    public void initTableData() {
+	    	    	
+	    	DefaultTableModel model = new DefaultTableModel(getPatientsData(), tableColumns);
+	        patientsTable = new JTable(model);
+	        scrollPane = new  JScrollPane(patientsTable);	      
+	        TableColumnModel colmodel = patientsTable.getColumnModel();        
+	        TableColumn col = colmodel.getColumn(5);      	           
+	        col.setCellEditor(new SpinnerEditor());  
+	       	           
+	    }
+	    
+		@SuppressWarnings("deprecation")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			//todo: check inputs formatting && sql erroers		
+			java.util.Date date = (java.util.Date) datePicker.getModel().getValue();
+			java.sql.Date dt = new java.sql.Date(date.getTime());
+			patientDAO.addPatient(new Patient(firstname.getText(),lastname.getText(), dt,namevaccine.getText(),Integer.valueOf(nbrDose.getText())));        
+			updatePatientTable();
+	 
+		}  
+		
+		public class DateLabelFormatter extends AbstractFormatter {
 
+	        /**
+			 * 
+			 */
 			private static final long serialVersionUID = 1L;
-				private List<Object[]> data;
-		        private List<String> columnNames;
+			private String datePattern = "yyyy-MM-dd";
+	        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
-		        public PatientTableModel(List<String> columnNames, List<Object[]> data) {
-		            super();
-		            this.columnNames = columnNames;
-		            this.data = data;
-		        }
+	        @Override
+	        public Object stringToValue(String text) throws ParseException {
+	            return dateFormatter.parseObject(text);
+	        }
 
-		        @Override
-		        public int getRowCount() {
-		            return data.size();
-		        }
+	        @Override
+	        public String valueToString(Object value) throws ParseException {
+	            if (value != null) {
+	                Calendar cal = (Calendar) value;
+	                return dateFormatter.format(cal.getTime());
+	            }
 
-		        @Override
-		        public int getColumnCount() {
-		            return columnNames.size();
-		        }
+	            return "";
+	        }
 
-		        @Override
-		        public String getColumnName(int column) {
-		            return columnNames.get(column);
-		        }
+	    }
+	    
+	    public static class SpinnerEditor extends DefaultCellEditor
+	    {
+	        
+			private static final long serialVersionUID = 1L;
+			JSpinner sp;		
+			int selected_row;
+	        DefaultEditor defaultEditor;
+	        JTextField text;
+	                
+	        public SpinnerEditor() {
+	        	
+	            super(new JTextField());
+	            sp = new JSpinner();
+	            JComponent comp = sp.getEditor();
+	            JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
+	            DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
+	            formatter.setCommitsOnValidEdit(true);
+	            sp.addChangeListener(new ChangeListener() {
 
-		        @Override
-		        public Object getValueAt(int rowIndex, int columnIndex) {
-		            return data.get(rowIndex)[columnIndex];
-		        }
-
-		    }    
+	                @Override
+	                public void stateChanged(ChangeEvent e) {          	
+	                	patientDAO.updatePatientDose((int)patientsTable.getModel().getValueAt(selected_row, 0),(int)sp.getValue());
+	                }
+	            });
+	                
+	            defaultEditor = ((DefaultEditor)sp.getEditor());
+	            text = defaultEditor.getTextField();
+	        }
+	   
+	        public Component getTableCellEditorComponent(JTable table, Object 
+	        value, boolean isSelected, int row, int column) 
+	        {
+	        	selected_row = row;
+	            sp.setValue(value);    
+	            return sp;
+	        }
+	       
+	        public Object getCellEditorValue() {
+	            return sp.getValue();
+	        }
+	    }
+			
+		
 }
 
