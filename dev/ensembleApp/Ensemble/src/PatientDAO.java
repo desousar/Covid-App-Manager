@@ -157,6 +157,33 @@ public class PatientDAO {
 
 	}
 	
+	public int getAmountPersWithNbrDose(String nb) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		int res = 0;
+
+		try {
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
+			ps = con.prepareStatement("SELECT * FROM `patient` WHERE nbrdose = ?");
+			ps.setString(1,nb);
+
+			rs=ps.executeQuery();
+		
+			if(rs.next())
+				res = rs.getInt("nbrdose");
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			
+			try {if (rs != null)rs.close();} catch (Exception t) {}
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		return res;
+	}
+	
 	public static void TestAddPatient() {
 		
 		PatientDAO PatientDAO=new PatientDAO();

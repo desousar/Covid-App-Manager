@@ -21,7 +21,7 @@ public class MainWindow extends JFrame implements ActionListener
     private JButton stockViewButton = new JButton("Stock"); 
     private StockPanel stockPanel;
     private JButton vaccineViewButton = new JButton("Vaccination");   
-    private JPanel statPanel;
+    private StatisticsPanel statPanel;
     private JButton statViewButton = new JButton("Statistics");
     
     public MainWindow()
@@ -73,7 +73,7 @@ public class MainWindow extends JFrame implements ActionListener
     public void displayAuthView() {
     	authPanel = new AuthPanel();
     	JPanel buttonLayout = new JPanel();
-   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,50,50));
+   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,50));
    	 	buttonLayout.add(authButton);
     	authPanel.addLayout(buttonLayout);
        this.setContentPane(this.authPanel.getContenu());
@@ -83,7 +83,7 @@ public class MainWindow extends JFrame implements ActionListener
     public void displayStockView() {
     	 stockPanel = new StockPanel();
     	 JPanel buttonLayout = new JPanel();
-    	 buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,50,50));
+    	 buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,50));
     	 buttonLayout.add(vaccineViewButton);
     	 buttonLayout.add(statViewButton);
     	 stockPanel.addLayout(buttonLayout);
@@ -101,8 +101,11 @@ public class MainWindow extends JFrame implements ActionListener
     
     public void displayStatsView() {
     	statPanel = new StatisticsPanel();
-    	statPanel.add(vaccineViewButton);
-    	statPanel.add(stockViewButton);
+    	JPanel buttonLayout = new JPanel();
+   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,50));
+   	 	buttonLayout.add(vaccineViewButton);
+   	 	buttonLayout.add(stockViewButton);
+   	 	statPanel.addLayout(buttonLayout);
     	this.setContentPane(this.statPanel);
         this.revalidate();
     }
