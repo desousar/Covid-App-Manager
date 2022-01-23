@@ -1,9 +1,15 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
-import javax.swing.BoxLayout;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jfree.data.general.DefaultPieDataset;
@@ -18,12 +24,32 @@ public class StatisticsPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public StatisticsPanel() {
+	public StatisticsPanel() throws IOException {
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setLayout(new BorderLayout());
 		
 		JPanel titleLayout = new JPanel();
-		titleLayout.setLayout(new FlowLayout(FlowLayout.CENTER,0,20));
+		titleLayout.setLayout(new BorderLayout());
+		BufferedImage myPicture = ImageIO.read(new File("Image1.png"));
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		BufferedImage myPicture2 = ImageIO.read(new File("Image2.png"));
+		JLabel picLabel2 = new JLabel(new ImageIcon(myPicture2));
+		
+		JPanel img1 = new JPanel();
+		img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));
+		JPanel img2 = new JPanel();
+		img2.setLayout(new FlowLayout(FlowLayout.RIGHT,20,20));
+		
+		img1.setMaximumSize(getPreferredSize());
+		img2.setMaximumSize(getPreferredSize());
+		
+		img1.add(picLabel);
+		img2.add(picLabel2);
+		
+		titleLayout.add(img1, BorderLayout.LINE_START);
+		titleLayout.add(img2, BorderLayout.LINE_END);
+		
+		//--**--
 		
 		JPanel colLayout = new JPanel();
         colLayout.setLayout(new GridLayout(1,2,10,10));
@@ -56,6 +82,7 @@ public class StatisticsPanel extends JPanel {
                 return new Dimension(400, (int)(400 * 0.62));
             }
         };
+        cPanel.setMaximumSize(getMaximumSize());
         colLayout.add(cPanel);
         
         //----
@@ -80,12 +107,13 @@ public class StatisticsPanel extends JPanel {
                 return new Dimension(400, (int)(400 * 0.62));
             }
         };
+        cPanel2.setMaximumSize(getMaximumSize());
         colLayout.add(cPanel2);
         
-        this.add(titleLayout);
-        this.add(colLayout);
+        this.add(titleLayout,BorderLayout.PAGE_START);
+        this.add(colLayout,BorderLayout.CENTER);
 	}
 	public void addLayout(JPanel layout) {
-		this.add(layout);
+		this.add(layout, BorderLayout.PAGE_END);
 	}
 }

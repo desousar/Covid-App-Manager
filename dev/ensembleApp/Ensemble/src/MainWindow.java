@@ -3,6 +3,7 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -99,10 +100,10 @@ public class MainWindow extends JFrame implements ActionListener
         this.revalidate();
     }
     
-    public void displayStatsView() {
+    public void displayStatsView() throws IOException {
     	statPanel = new StatisticsPanel();
     	JPanel buttonLayout = new JPanel();
-   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,50));
+   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,50,25));
    	 	buttonLayout.add(vaccineViewButton);
    	 	buttonLayout.add(stockViewButton);
    	 	statPanel.addLayout(buttonLayout);
