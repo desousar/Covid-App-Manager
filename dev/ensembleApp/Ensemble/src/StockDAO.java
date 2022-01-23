@@ -7,16 +7,6 @@ import java.sql.SQLException;
 public class StockDAO {
 
 	/**
-	 * Database connection parameters
-	 */
-	final static String PORT1 = "8889";
-	final static String PORT2 = "3306";
-	final static String URL = "jdbc:mysql://localhost:" + PORT1 + "/ensemble";
-	final static String LOGIN="root";
-	final static String PASS="root";
-
-	
-	/**
 	 * Class Constructor
 	 * 
 	 */
@@ -37,7 +27,7 @@ public class StockDAO {
 		int res = 0;
 
 		try {
-			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 			ps = con.prepareStatement("SELECT stock FROM `materiel` WHERE name = ?");
 			ps.setString(1,name);
 
@@ -61,15 +51,14 @@ public class StockDAO {
 	public void setStockOf(String name, int amount) {
 		Connection con = null;
 		PreparedStatement ps = null;
-		int rs= 0;
 
 		try {
-			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 			ps = con.prepareStatement("UPDATE `materiel` SET stock = stock + ? WHERE name = ?");
 			ps.setInt(1,amount);
 			ps.setString(2,name);
 
-			rs=ps.executeUpdate();
+			ps.executeUpdate();
 		} catch (Exception ee) {
 			ee.printStackTrace();
 		} finally {

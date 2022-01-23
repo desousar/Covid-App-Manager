@@ -1,4 +1,6 @@
-import java.awt.Color;
+import java.awt.FlowLayout;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,18 +16,31 @@ public class AuthPanel {
     private JPasswordField passwordField = new JPasswordField();
     
     public AuthPanel() {
-    	p.setBackground(Color.PINK);
 		
-		p.setLayout(null);
-		userLabel.setBounds(50, 100, 100, 30);
-        passwordLabel.setBounds(50, 170, 100, 30);
-        userTextField.setBounds(150, 100, 150, 30);
-        passwordField.setBounds(150, 170, 150, 30);
+		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
 		
-        p.add(userLabel);
-        p.add(passwordLabel);
-        p.add(userTextField);
-        p.add(passwordField);
+		JPanel centreLayout = new JPanel();
+		centreLayout.setLayout(new FlowLayout(FlowLayout.CENTER,0,50));
+		
+        JPanel corpsLayout = new JPanel();
+        corpsLayout.setLayout(new BoxLayout(corpsLayout, BoxLayout.PAGE_AXIS));
+        
+        JPanel userLayout = new JPanel();
+        userLayout.setLayout(new FlowLayout());
+        userLayout.add(userLabel);
+        userLayout.add(userTextField);
+        userTextField.setColumns(15);
+        corpsLayout.add(userLayout);
+        
+        JPanel pwLayout = new JPanel();
+        pwLayout.setLayout(new FlowLayout());
+        pwLayout.add(passwordLabel);
+        pwLayout.add(passwordField);
+        passwordField.setColumns(15);
+        corpsLayout.add(pwLayout);
+        
+        centreLayout.add(corpsLayout);
+        p.add(centreLayout);
     }
     
     public String getUser() {
@@ -36,8 +51,11 @@ public class AuthPanel {
 		return passwordField.getText().toString();
 	}
 
-	public void add(JButton boutonEnvoi) {
-		p.add(boutonEnvoi);
+	public void add(JButton bouton) {
+		p.add(bouton);
+	}
+	public void addLayout(JPanel layout) {
+		p.add(layout);
 	}
 	
 	public JPanel getContenu() {

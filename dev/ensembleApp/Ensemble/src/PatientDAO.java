@@ -10,16 +10,6 @@ import models.Patient;
  * @version 1.0
  * */
 public class PatientDAO {
-
-	/**
-	 * Database connection parameters
-	 */
-	final static String PORT1 = "8889";
-	final static String PORT2 = "3306";
-	final static String URL = "jdbc:mysql://localhost:" + PORT1 + "/ensemble";
-	final static String LOGIN="root";
-	final static String PASS="root";
-
 	
 	/**
 	 * Class Constructor
@@ -48,7 +38,7 @@ public class PatientDAO {
 		int rows =0;
 		try {
 			
-			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 			
 			ps = con.prepareStatement("INSERT INTO patient (firstname, lastname, datebirth,namevaccine,nbrdose) VALUES (? ,?, ?, ?, ?)");
 			ps.setString(1,newPatient.getFirstname());
@@ -81,7 +71,7 @@ public class PatientDAO {
 		PreparedStatement ps = null;
 		try {
 
-			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 			ps = con.prepareStatement("UPDATE patient SET nbrdose = ? WHERE id = ?");
 			ps.setInt(1,nb);
 			ps.setInt(2,id);
@@ -111,7 +101,7 @@ public class PatientDAO {
 
 		try {
 
-			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 			ps = con.prepareStatement("SELECT * FROM patient WHERE id= ?");
 			ps.setInt(1,id);
 
@@ -146,7 +136,7 @@ public class PatientDAO {
 
 		try {
 
-			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 			ps = con.prepareStatement("SELECT * FROM patient");
 
 			rs=ps.executeQuery();

@@ -4,16 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class AuthDAO {
-
-	/**
-	 * Database connection parameters
-	 */
-	final static String PORT1 = "8889";
-	final static String PORT2 = "3306";
-	final static String URL = "jdbc:mysql://localhost:" + PORT1 + "/ensemble";
-	final static String LOGIN="root";
-	final static String PASS="root";
-
 	
 	/**
 	 * Class Constructor
@@ -36,7 +26,7 @@ public class AuthDAO {
 		boolean res = false;
 
 		try {
-			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 			ps = con.prepareStatement("SELECT * FROM `auth` WHERE user = ? AND password = ?");
 			ps.setString(1,user);
 			ps.setString(2,pw);
