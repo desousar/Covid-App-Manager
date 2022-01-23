@@ -39,7 +39,7 @@ CREATE TABLE `auth` (
 --
 
 INSERT INTO `auth` (`id`, `user`, `password`) VALUES
-(1, 'root', '1234');
+(1, 'toto', 'f71dbe52628a3f83a77ab494817525c6');
 
 -- --------------------------------------------------------
 
