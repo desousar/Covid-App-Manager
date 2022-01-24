@@ -165,13 +165,13 @@ public class PatientDAO {
 
 		try {
 			con = DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
-			ps = con.prepareStatement("SELECT * FROM `patient` WHERE nbrdose = ?");
+			ps = con.prepareStatement("SELECT COUNT(nbrdose) FROM `patient` WHERE nbrdose = ?");
 			ps.setString(1,nb);
 
 			rs=ps.executeQuery();
 		
 			if(rs.next())
-				res = rs.getInt("nbrdose");
+				res = rs.getInt("COUNT(nbrdose)");
 
 		} catch (Exception ee) {
 			ee.printStackTrace();
