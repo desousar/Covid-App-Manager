@@ -172,6 +172,14 @@ public class PatientPanel implements ActionListener {
 	       	           
 	    }
 	    
+	    private void clearFormFields() {
+	    	firstname.setText("");
+	    	lastname.setText("");
+	    	namevaccine.setText("");
+	    	nbrDose.setText("");
+	    	datePicker.getModel().setValue(null);
+	    		
+	    }
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
@@ -180,6 +188,7 @@ public class PatientPanel implements ActionListener {
 			java.sql.Date dt = new java.sql.Date(date.getTime());
 			patientDAO.addPatient(new Patient(firstname.getText(),lastname.getText(), dt,namevaccine.getText(),Integer.valueOf(nbrDose.getText())));        
 			updatePatientTable();
+			clearFormFields();
 	 
 		}  
 		
