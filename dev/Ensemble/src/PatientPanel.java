@@ -28,20 +28,19 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import models.Patient;
 
-public class PatientPanel extends JPanel implements ActionListener {
+public class PatientPanel implements ActionListener {
 			  
+		JPanel own = new JPanel();
+	
 	    private static final long serialVersionUID = 1L;
 	    private static PatientDAO patientDAO;
 	    private static JTable patientsTable;
 	  
-	    
-	    
 	    private JTextField firstname;
 	    private JTextField lastname;   
 	    private JDatePickerImpl datePicker;
 	    private JTextField namevaccine;
 	    
-	   
 	    private JTextField nbrDose;
 
 	    private JButton addRowButton = new JButton("Add");	    
@@ -50,8 +49,9 @@ public class PatientPanel extends JPanel implements ActionListener {
 	    private List<Patient> patientList;
 	  
 	    
-	    public PatientPanel() {    	
-	    	    	
+	    public PatientPanel() {
+	    	own.setLayout(new BorderLayout());
+	    	
 	    	JPanel formpanel = new JPanel();
 
 	    	addRowButton.addActionListener(this);
@@ -103,8 +103,8 @@ public class PatientPanel extends JPanel implements ActionListener {
 	        
 	        formpanel.add(addRowButton);
 
-	        this.add(scrollPane,BorderLayout.NORTH);	  
-	        this.add(formpanel,BorderLayout.CENTER);
+	        own.add(scrollPane,BorderLayout.NORTH);	  
+	        own.add(formpanel,BorderLayout.CENTER);
 	      
 	    }
 	    
@@ -219,6 +219,15 @@ public class PatientPanel extends JPanel implements ActionListener {
 	        }
 	    }
 			
+	    public void add(JButton boutonEnvoi) {
+			own.add(boutonEnvoi);
+		}
+		public void addLayout(JPanel layout) {
+			own.add(layout, BorderLayout.PAGE_END);
+		}
+		public JPanel getContenu() {
+			return own;
+		}
 		
 }
 

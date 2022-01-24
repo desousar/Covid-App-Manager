@@ -20,7 +20,7 @@ public class MainWindow extends JFrame implements ActionListener
     private AuthPanel authPanel;
     private JButton authButton = new JButton("Connect");
     
-    public JPanel patientPanel;
+    public PatientPanel patientPanel;
     private JButton stockViewButton = new JButton("Stock"); 
     private StockPanel stockPanel;
     private JButton vaccineViewButton = new JButton("Vaccination");   
@@ -110,9 +110,12 @@ public class MainWindow extends JFrame implements ActionListener
     
     public void displayVaccineView() {
     	patientPanel = new PatientPanel();
-    	patientPanel.add(stockViewButton);
-    	patientPanel.add(statViewButton);
-    	this.setContentPane(this.patientPanel);
+    	JPanel buttonLayout = new JPanel();
+   	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,50,25));
+   	 	buttonLayout.add(stockViewButton);
+   	 	buttonLayout.add(statViewButton);
+   	 	patientPanel.addLayout(buttonLayout);
+    	this.setContentPane(this.patientPanel.getContenu());
         this.revalidate();
     }
     
