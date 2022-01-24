@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
 import java.sql.DriverManager;
 
 import javax.swing.JButton;
@@ -108,7 +107,7 @@ public class MainWindow extends JFrame implements ActionListener
         getContentPane().repaint();
     }
     
-    public void displayVaccineView() {
+    public void displayVaccineView() throws IOException {
     	patientPanel = new PatientPanel();
     	JPanel buttonLayout = new JPanel();
    	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,50,25));

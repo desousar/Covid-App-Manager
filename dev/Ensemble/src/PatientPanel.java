@@ -1,13 +1,21 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
+
+import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -31,8 +39,7 @@ import models.Patient;
 public class PatientPanel implements ActionListener {
 			  
 		JPanel own = new JPanel();
-	
-	    private static final long serialVersionUID = 1L;
+
 	    private static PatientDAO patientDAO;
 	    private static JTable patientsTable;
 	  
@@ -49,8 +56,26 @@ public class PatientPanel implements ActionListener {
 	    private List<Patient> patientList;
 	  
 	    
-	    public PatientPanel() {
+	    public PatientPanel() throws IOException {
 	    	own.setLayout(new BorderLayout());
+	    	
+	    	JPanel titleLayout = new JPanel();
+			titleLayout.setLayout(new BorderLayout());
+			BufferedImage myPicture = ImageIO.read(new File("Image1.png"));
+			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+			BufferedImage myPicture2 = ImageIO.read(new File("Image2.png"));
+			JLabel picLabel2 = new JLabel(new ImageIcon(myPicture2));
+			
+			JPanel img1 = new JPanel();
+			img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));
+			JPanel img2 = new JPanel();
+			img2.setLayout(new FlowLayout(FlowLayout.RIGHT,20,20));
+			
+			img1.add(picLabel);
+			img2.add(picLabel2);
+			
+			titleLayout.add(img1, BorderLayout.LINE_START);
+			titleLayout.add(img2, BorderLayout.LINE_END);
 	    	
 	    	JPanel formpanel = new JPanel();
 
@@ -103,8 +128,15 @@ public class PatientPanel implements ActionListener {
 	        
 	        formpanel.add(addRowButton);
 
-	        own.add(scrollPane,BorderLayout.NORTH);	  
-	        own.add(formpanel,BorderLayout.CENTER);
+	        JPanel contenu = new JPanel();
+	        contenu.setLayout(new BoxLayout(contenu, BoxLayout.PAGE_AXIS));
+	        
+	        contenu.add(scrollPane);
+	        contenu.add(formpanel);
+	        
+	        own.add(titleLayout,BorderLayout.PAGE_START);
+	        //own.add(scrollPane,BorderLayout.NORTH);	  
+	        own.add(contenu,BorderLayout.CENTER);
 	      
 	    }
 	    
