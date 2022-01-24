@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -48,6 +50,15 @@ public class MainWindow extends JFrame implements ActionListener
 			{
 				String user = this.authPanel.getUser();
 				String hash = generateMD5Hash(this.authPanel.getPW());
+				
+				GlobalDAO.setPORT(this.authPanel.getDbPort());
+				try {
+					DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
+				} catch (Exception ee) {
+					ee.printStackTrace();
+					this.authPanel.reset();
+				}
+				
 				if(checkAccount(user, hash)) {
 					authButton.setText("Loading...");
 					this.displayStockView();
