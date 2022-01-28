@@ -1,5 +1,0 @@
-(auth)
-"Ben" accueil => affichage stock + add/delete
-"Yassine" vaccination => affichage JTable + ajout (améliorer col Dose => rendre nbr of dose éditable))
-(statistique => d'abord afficher en ligne sans représentation graphique)
-(contact => trouver mailto:@mail (HTML) en Java)

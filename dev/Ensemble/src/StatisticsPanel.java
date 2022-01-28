@@ -30,13 +30,13 @@ public class StatisticsPanel extends JPanel {
 		
 		JPanel titleLayout = new JPanel();
 		titleLayout.setLayout(new BorderLayout());
-		BufferedImage myPicture = ImageIO.read(new File("Image1.png"));
+		BufferedImage myPicture = ImageIO.read(new File("Covid_Vaccines_Manager.png"));
 		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 		BufferedImage myPicture2 = ImageIO.read(new File("Image2.png"));
 		JLabel picLabel2 = new JLabel(new ImageIcon(myPicture2));
 		
 		JPanel img1 = new JPanel();
-		img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));
+		img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,0));
 		JPanel img2 = new JPanel();
 		img2.setLayout(new FlowLayout(FlowLayout.RIGHT,20,20));
 		
@@ -56,22 +56,16 @@ public class StatisticsPanel extends JPanel {
 		
 		final DefaultPieDataset pieDataset = new DefaultPieDataset();
 		int v = stockDAO.getStockOf("vaccine");
-		int g = stockDAO.getStockOf("gel");
+		int ge = stockDAO.getStockOf("gel");
 		int m = stockDAO.getStockOf("mask");
-		int o = stockDAO.getStockOf("overall");
-		int c = stockDAO.getStockOf("cloves");
-		double total = v+g+m+o+c;
-		String vp = numberFormat.format(v/total*100);
-		String gp = numberFormat.format(g/total*100);
-		String mp = numberFormat.format(m/total*100);
-		String op = numberFormat.format(o/total*100);
-		String cp = numberFormat.format(c/total*100);
-        pieDataset.setValue("Vaccine "+vp+"%", v);
-        pieDataset.setValue("Gel "+gp+"%", g);
-        pieDataset.setValue("Mask "+mp+"%", m);
-        pieDataset.setValue("Overall "+op+"%", o);
-        pieDataset.setValue("Cloves "+cp+"%", c);
-        final JFreeChart pieChart = ChartFactory.createPieChart("Material management", pieDataset, true, false, false);
+		int o = stockDAO.getStockOf("gown");
+		int gl = stockDAO.getStockOf("gloves");
+        pieDataset.setValue("Vaccine "+ v, v);
+        pieDataset.setValue("Gel "+ ge, ge);
+        pieDataset.setValue("Mask "+ m, m);
+        pieDataset.setValue("Gown "+ o, o);
+        pieDataset.setValue("Gloves "+ gl, gl);
+        final JFreeChart pieChart = ChartFactory.createPieChart("Current Stock", pieDataset, true, false, false);
         final ChartPanel cPanel = new ChartPanel(pieChart) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -89,13 +83,19 @@ public class StatisticsPanel extends JPanel {
         int one = patientDAO.getAmountPersWithNbrDose("1");
         int two = patientDAO.getAmountPersWithNbrDose("2");
         int three = patientDAO.getAmountPersWithNbrDose("3");
-        double tot = one+two+three;
+        int four = patientDAO.getAmountPersWithNbrDose("4");
+        int five = patientDAO.getAmountPersWithNbrDose("5");
+        double tot = one+two+three+four+five;
         String onep = numberFormat.format(one/tot*100);
         String twop = numberFormat.format(two/tot*100);
         String threep = numberFormat.format(three/tot*100);
-        pieDataset2.setValue("Dose 01 "+onep+"%", one);
-        pieDataset2.setValue("Dose 02 "+twop+"%", two);
-        pieDataset2.setValue("Dose 03 "+threep+"%", three);
+        String fourp = numberFormat.format(four/tot*100);
+        String fivep = numberFormat.format(five/tot*100);
+        pieDataset2.setValue("Dose 1: "+onep+"%", one);
+        pieDataset2.setValue("Dose 2: "+twop+"%", two);
+        pieDataset2.setValue("Dose 3: "+threep+"%", three);
+        pieDataset2.setValue("Dose 4: "+fourp+"%", four);
+        pieDataset2.setValue("Dose 5: "+fivep+"%", five);
         final JFreeChart pieChart2 = ChartFactory.createPieChart("Patient management", pieDataset2, true, false, false);
         final ChartPanel cPanel2 = new ChartPanel(pieChart2) {
 			private static final long serialVersionUID = 1L;

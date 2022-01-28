@@ -47,27 +47,27 @@ public class PatientPanel implements ActionListener {
 	    private JTextField lastname;   
 	    private JDatePickerImpl datePicker;
 	    private JTextField namevaccine;
-	    
-	    private JTextField nbrDose;
 
 	    private JButton addRowButton = new JButton("Add");	    
-	    private String [] tableColumns = {"Id","First Name","Last Name","Date of birth","Vaccine","Nbrdose"};
+	    private String [] tableColumns = {"Id","First Name","Last Name","Date of birth","Vaccine","Number of doses"};
 	    private JScrollPane scrollPane;
 	    private List<Patient> patientList;
 	  
+	    JLabel advise1 = new JLabel("pour modifier le nombre de dose d'une personne, double cliquez et utilisez les flèches");
+	    JLabel advise2 = new JLabel("lorsqu'une personne est ajoutée, 1 dose de vaccin est retirée automatiquement du stock");
 	    
 	    public PatientPanel() throws IOException {
 	    	own.setLayout(new BorderLayout());
 	    	
 	    	JPanel titleLayout = new JPanel();
 			titleLayout.setLayout(new BorderLayout());
-			BufferedImage myPicture = ImageIO.read(new File("Image1.png"));
+			BufferedImage myPicture = ImageIO.read(new File("Covid_Vaccines_Manager.png"));
 			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 			BufferedImage myPicture2 = ImageIO.read(new File("Image2.png"));
 			JLabel picLabel2 = new JLabel(new ImageIcon(myPicture2));
 			
 			JPanel img1 = new JPanel();
-			img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,20));
+			img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,0));
 			JPanel img2 = new JPanel();
 			img2.setLayout(new FlowLayout(FlowLayout.RIGHT,20,20));
 			
@@ -91,13 +91,9 @@ public class PatientPanel implements ActionListener {
 	        lastname = new JTextField(5);
 	        lastname.setToolTipText("Last name");
 	        
-	        JLabel namevaccinelabel = new JLabel("Vaccine");
+	        JLabel namevaccinelabel = new JLabel("Vaccine Type");
 	        namevaccine = new JTextField(5);
 	        namevaccine.setToolTipText("Vaccine");
-	        
-	        JLabel nbrDoselabel = new JLabel("Nbrdose");
-	        nbrDose = new JTextField(5);
-	        nbrDose.setToolTipText("Number of doses");
 	        
 	        JLabel birthDatelabel = new JLabel("Birth date");
 	       
@@ -123,14 +119,21 @@ public class PatientPanel implements ActionListener {
 	        formpanel.add(namevaccinelabel);
 	        formpanel.add(namevaccine);
 	        
-	        formpanel.add(nbrDoselabel);
-	        formpanel.add(nbrDose);
-	        
 	        formpanel.add(addRowButton);
 
 	        JPanel contenu = new JPanel();
 	        contenu.setLayout(new BoxLayout(contenu, BoxLayout.PAGE_AXIS));
 	        
+	        JPanel contentadv1 = new JPanel();
+	        contentadv1.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
+	        contentadv1.add(advise1);
+	        
+	        JPanel contentadv2 = new JPanel();
+	        contentadv2.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
+	        contentadv2.add(advise2);
+	        
+	        contenu.add(contentadv1);
+	        contenu.add(contentadv2);
 	        contenu.add(scrollPane);
 	        contenu.add(formpanel);
 	        
@@ -176,7 +179,6 @@ public class PatientPanel implements ActionListener {
 	    	firstname.setText("");
 	    	lastname.setText("");
 	    	namevaccine.setText("");
-	    	nbrDose.setText("");
 	    	datePicker.getModel().setValue(null);
 	    		
 	    }
@@ -186,7 +188,9 @@ public class PatientPanel implements ActionListener {
 			//todo: check inputs formatting && sql erroers		
 			java.util.Date date = (java.util.Date) datePicker.getModel().getValue();
 			java.sql.Date dt = new java.sql.Date(date.getTime());
-			patientDAO.addPatient(new Patient(firstname.getText(),lastname.getText(), dt,namevaccine.getText(),Integer.valueOf(nbrDose.getText())));        
+			patientDAO.addPatient(new Patient(firstname.getText(),lastname.getText(), dt,namevaccine.getText(),1));
+			StockDAO stockDAO = new StockDAO();
+			stockDAO.setStockOf("vaccine", -1);
 			updatePatientTable();
 			clearFormFields();
 	 
@@ -237,9 +241,19 @@ public class PatientPanel implements ActionListener {
 	            formatter.setCommitsOnValidEdit(true);
 	            sp.addChangeListener(new ChangeListener() {
 
+	            	Object lastValue;
 	                @Override
-	                public void stateChanged(ChangeEvent e) {          	
-	                	patientDAO.updatePatientDose((int)patientsTable.getModel().getValueAt(selected_row, 0),(int)sp.getValue());
+	                public void stateChanged(ChangeEvent e) {   
+	                	if (lastValue != null && !sp.getValue().equals(lastValue)) {
+	                		patientDAO.updatePatientDose((int)patientsTable.getModel().getValueAt(selected_row, 0),(int)sp.getValue());
+	                		StockDAO stockDAO = new StockDAO();
+	                		int amount = 1;
+	                		if((int)lastValue > (int)sp.getValue()) {
+	                			amount *= -1;
+	                		}
+		        			stockDAO.setStockOf("vaccine", amount);
+	                     }
+	                     lastValue = sp.getValue();
 	                }
 	            });
 	                

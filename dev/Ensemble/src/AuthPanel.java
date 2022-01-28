@@ -1,6 +1,13 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,44 +19,65 @@ public class AuthPanel {
 	
 	JLabel userLabel = new JLabel("USERNAME");
     JLabel passwordLabel = new JLabel("PASSWORD");
-    JLabel dbLabel = new JLabel("database port");
     private JTextField userTextField = new JTextField();
     private JPasswordField passwordField = new JPasswordField();
-    private JTextField dbField = new JTextField();
     
-    public AuthPanel() {
+    public AuthPanel() throws IOException {
 		
-		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+		p.setLayout(new BorderLayout());
 		
-		JPanel centreLayout = new JPanel();
-		centreLayout.setLayout(new FlowLayout(FlowLayout.CENTER,0,50));
+		JPanel titleLayout = new JPanel();
+		titleLayout.setOpaque(false);
+		titleLayout.setLayout(new BorderLayout());
+		BufferedImage myPicture = ImageIO.read(new File("Covid_Vaccines_Manager.png"));
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		BufferedImage myPicture2 = ImageIO.read(new File("Image2.png"));
+		JLabel picLabel2 = new JLabel(new ImageIcon(myPicture2));
+		
+		JPanel img1 = new JPanel();
+		img1.setOpaque(false);
+		img1.setLayout(new FlowLayout(FlowLayout.LEFT,20,0));
+		JPanel img2 = new JPanel();
+		img2.setOpaque(false);
+		img2.setLayout(new FlowLayout(FlowLayout.RIGHT,20,20));
+		
+		img1.add(picLabel);
+		img2.add(picLabel2);
+		
+		titleLayout.add(img1, BorderLayout.LINE_START);
+		titleLayout.add(img2, BorderLayout.LINE_END);
+		
 		
         JPanel corpsLayout = new JPanel();
-        corpsLayout.setLayout(new BoxLayout(corpsLayout, BoxLayout.PAGE_AXIS));
+        corpsLayout.setOpaque(false);
+        corpsLayout.setLayout(new BorderLayout());
+        
+        JPanel listPane = new JPanel();
+        listPane.setOpaque(false);
+		listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
         
         JPanel userLayout = new JPanel();
+        userLayout.setOpaque(false);
         userLayout.setLayout(new FlowLayout());
         userLayout.add(userLabel);
         userLayout.add(userTextField);
         userTextField.setColumns(15);
-        corpsLayout.add(userLayout);
+        listPane.add(userLayout);
         
         JPanel pwLayout = new JPanel();
+        pwLayout.setOpaque(false);
         pwLayout.setLayout(new FlowLayout());
         pwLayout.add(passwordLabel);
         pwLayout.add(passwordField);
         passwordField.setColumns(15);
-        corpsLayout.add(pwLayout);
+        pwLayout.setPreferredSize(null);
+        listPane.add(pwLayout);
         
-        JPanel dbLayout = new JPanel();
-        dbLayout.setLayout(new FlowLayout());
-        dbLayout.add(dbLabel);
-        dbLayout.add(dbField);
-        dbField.setColumns(15);
-        corpsLayout.add(dbLayout);
-        
-        centreLayout.add(corpsLayout);
-        p.add(centreLayout);
+        corpsLayout.add(listPane, BorderLayout.NORTH);
+        p.add(titleLayout,BorderLayout.PAGE_START);
+        p.add(corpsLayout, BorderLayout.CENTER);
+
+        p.setBackground(new Color(179, 230, 255));
     }
     
     public String getUser() {
@@ -59,21 +87,17 @@ public class AuthPanel {
 	public String getPW() {
 		return passwordField.getText().toString();
 	}
-    public String getDbPort() {
-		return dbField.getText().toString();
-	}
     
     public void reset() {
     	userTextField.setText("");
     	passwordField.setText("");
-    	dbField.setText("");
     }
 
 	public void add(JButton bouton) {
 		p.add(bouton);
 	}
 	public void addLayout(JPanel layout) {
-		p.add(layout);
+		p.add(layout, BorderLayout.PAGE_END);
 	}
 	
 	public JPanel getContenu() {

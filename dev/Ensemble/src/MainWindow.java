@@ -1,8 +1,9 @@
 
-
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import javax.imageio.ImageIO;
+
 public class MainWindow extends JFrame implements ActionListener
 {
     private static final long serialVersionUID = 1L; 
@@ -20,16 +23,26 @@ public class MainWindow extends JFrame implements ActionListener
     private JButton authButton = new JButton("Connect");
     
     public PatientPanel patientPanel;
-    private JButton stockViewButton = new JButton("Stock"); 
+    private JButton stockViewButton = new JButton("Stock Management"); 
     private StockPanel stockPanel;
-    private JButton vaccineViewButton = new JButton("Vaccination");   
+    private JButton vaccineViewButton = new JButton("Vaccination Delivery");   
     private StatisticsPanel statPanel;
     private JButton statViewButton = new JButton("Statistics");
     
-    public MainWindow()
+    public MainWindow() throws IOException
     {
-        this.setTitle("Ensemble");
-        this.setSize(1000,600);     
+    	
+    	//setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Covid_Vaccines_Manager.png")));
+    	BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File("Covid_Vaccines_Manager-logo.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.setIconImage(image);
+    	
+        this.setTitle("Covid Vaccines Manager");
+        this.setSize(1000,600);  
     
         authButton.addActionListener(this);
         stockViewButton.addActionListener(this);
@@ -49,8 +62,6 @@ public class MainWindow extends JFrame implements ActionListener
 			{
 				String user = this.authPanel.getUser();
 				String hash = generateMD5Hash(this.authPanel.getPW());
-				
-				GlobalDAO.setPORT(this.authPanel.getDbPort());
 				try {
 					DriverManager.getConnection(GlobalDAO.URL, GlobalDAO.LOGIN, GlobalDAO.PASS);
 				} catch (Exception ee) {
@@ -84,9 +95,10 @@ public class MainWindow extends JFrame implements ActionListener
         
     }
     
-    public void displayAuthView() {
+    public void displayAuthView() throws IOException {
     	authPanel = new AuthPanel();
     	JPanel buttonLayout = new JPanel();
+    	buttonLayout.setOpaque(false);
    	 	buttonLayout.setLayout(new FlowLayout(FlowLayout.CENTER,25,25));
    	 	buttonLayout.add(authButton);
     	authPanel.addLayout(buttonLayout);
@@ -129,7 +141,7 @@ public class MainWindow extends JFrame implements ActionListener
         this.revalidate();
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         new MainWindow();
     }
