@@ -168,6 +168,7 @@ public class PatientPanel implements ActionListener {
 	    	    	
 	    	DefaultTableModel model = new DefaultTableModel(getPatientsData(), tableColumns);
 	        patientsTable = new JTable(model);
+	        patientsTable.setAutoCreateRowSorter(true);
 	        scrollPane = new  JScrollPane(patientsTable);	      
 	        TableColumnModel colmodel = patientsTable.getColumnModel();        
 	        TableColumn col = colmodel.getColumn(5);      	           
@@ -245,7 +246,7 @@ public class PatientPanel implements ActionListener {
 	                @Override
 	                public void stateChanged(ChangeEvent e) {   
 	                	if (lastValue != null && !sp.getValue().equals(lastValue)) {
-	                		patientDAO.updatePatientDose((int)patientsTable.getModel().getValueAt(selected_row, 0),(int)sp.getValue());
+	                		patientDAO.updatePatientDose((int)patientsTable.getValueAt(selected_row, 0),(int)sp.getValue());
 	                		StockDAO stockDAO = new StockDAO();
 	                		int amount = 1;
 	                		if((int)lastValue > (int)sp.getValue()) {
