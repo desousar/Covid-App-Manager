@@ -53,8 +53,8 @@ public class PatientPanel implements ActionListener {
 	    private JScrollPane scrollPane;
 	    private List<Patient> patientList;
 	  
-	    JLabel advise1 = new JLabel("pour modifier le nombre de dose d'une personne, double cliquez et utilisez les flèches");
-	    JLabel advise2 = new JLabel("lorsqu'une personne est ajoutée, 1 dose de vaccin est retirée automatiquement du stock");
+	    JLabel advise1 = new JLabel("*to change the number of doses for a person, double click and use the arrows*");
+	    JLabel advise2 = new JLabel("*when a person is added, 1 dose of vaccine is automatically removed from the stock*");
 	    
 	    public PatientPanel() throws IOException {
 	    	own.setLayout(new BorderLayout());
