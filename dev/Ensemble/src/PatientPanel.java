@@ -249,7 +249,7 @@ public class PatientPanel implements ActionListener {
 	                		patientDAO.updatePatientDose((int)patientsTable.getValueAt(selected_row, 0),(int)sp.getValue());
 	                		StockDAO stockDAO = new StockDAO();
 	                		int amount = 1;
-	                		if((int)lastValue > (int)sp.getValue()) {
+	                		if((int)lastValue < (int)sp.getValue()) {
 	                			amount *= -1;
 	                		}
 		        			stockDAO.setStockOf("vaccine", amount);
